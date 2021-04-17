@@ -5,7 +5,9 @@ import 'package:projetocompleto2/models/transitions_page.dart';
 import 'package:projetocompleto2/pages/bottom_tab_page/bottom_tab_page.dart';
 import 'package:projetocompleto2/pages/form_page/form_page.dart';
 import 'package:projetocompleto2/pages/home_page/home_page.dart';
+import 'package:projetocompleto2/pages/login_page/login_page.dart';
 import 'package:projetocompleto2/pages/top_tab_page/top_tab_page.dart';
+import 'package:projetocompleto2/widgets/custom_drawer/custom_drawer.dart';
 import 'package:projetocompleto2/widgets/custom_material_page_route/custom_material_page_route.dart';
 
 abstract class Routes {
@@ -13,6 +15,7 @@ abstract class Routes {
   static const topTabPage = '/top_tab';
   static const bottomTabPage = '/bottom_tab';
   static const formPage = '/form';
+  static const loginPage = '/login';
 
   static final detailsPage = <DetailsPage>[
     DetailsPage(
@@ -48,6 +51,14 @@ abstract class Routes {
         builder: (ctx) => FormPage(),
       ),
     ),
+    DetailsPage(
+      name: 'Login', 
+      goToNamedRoute: loginPage,
+      leading: Icon(Icons.login),
+      transitionsPage: TransitionsPage(
+        builder: (ctx) => LoginPage(),
+      ),
+    ),
   ];
 
   static Route<dynamic> onGenerateRoutes(RouteSettings settings) {
@@ -59,6 +70,7 @@ abstract class Routes {
     );
 
     final TransitionsPage page = settings.arguments;
+    CustomDrawer.changePage(settings.name);
     return _defaultRoute(
       routeSettings: settings,
       fullscreenDialog: page?.fullscreenDialog ?? false,

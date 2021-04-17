@@ -23,7 +23,10 @@ Future<void> main() async {
         pageTransitionsTheme: PageTransitionsTheme(
           builders: {
             TargetPlatform.android: CustomPageTransitionsBuilder()
-          }
+          },
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.red,
         ),
       ),
     ),

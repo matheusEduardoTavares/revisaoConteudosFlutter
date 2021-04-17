@@ -4,6 +4,15 @@ import 'package:projetocompleto2/utils/routes.dart';
 class CustomDrawer extends StatelessWidget {
   static int _selectedIndex = 0;
 
+  static void changePage(String newPage) {
+    var index = Routes.detailsPage.
+      indexWhere((page) => page.goToNamedRoute == newPage);
+
+    if (index != -1) {
+      _selectedIndex = index;
+    }
+  }
+
   @override 
   Widget build(BuildContext context) {
     final pagesItems = Routes.detailsPage;
@@ -66,7 +75,6 @@ class CustomDrawer extends StatelessWidget {
                     leading: pagesItems[index].leading,
                     title: pagesItems[index].title ?? Text(pagesItems[index].name),
                     onTap: () {
-                      _selectedIndex = index;
                       Navigator.of(context).pushReplacementNamed(
                         pagesItems[index].goToNamedRoute,
                         arguments: pagesItems[index].transitionsPage,
