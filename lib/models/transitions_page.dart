@@ -6,7 +6,7 @@ class TransitionsPage<T> {
     this.fullscreenDialog,
     this.maintainState,
     this.arguments,
-    this.hasAnimation = false,
+    this.hasAnimation = true,
   });
 
   final WidgetBuilder builder;
