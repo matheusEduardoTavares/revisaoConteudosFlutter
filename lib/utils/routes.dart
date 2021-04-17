@@ -6,6 +6,7 @@ import 'package:projetocompleto2/pages/bottom_tab_page/bottom_tab_page.dart';
 import 'package:projetocompleto2/pages/config_page/config_page.dart';
 import 'package:projetocompleto2/pages/form_page/form_page.dart';
 import 'package:projetocompleto2/pages/home_page/home_page.dart';
+import 'package:projetocompleto2/pages/isolate_page/isolate_page.dart';
 import 'package:projetocompleto2/pages/login_page/login_page.dart';
 import 'package:projetocompleto2/pages/redux_page/redux_page.dart';
 import 'package:projetocompleto2/pages/top_tab_page/top_tab_page.dart';
@@ -20,6 +21,7 @@ abstract class Routes {
   static const loginPage = '/login';
   static const reduxPage = '/redux';
   static const configsPage = '/configs';
+  static const isolatePage = '/isolate';
 
   static final detailsPage = <DetailsPage>[
     DetailsPage(
@@ -73,10 +75,18 @@ abstract class Routes {
     ),
     DetailsPage(
       name: 'Configurações', 
-      goToNamedRoute: reduxPage,
+      goToNamedRoute: configsPage,
       leading: Icon(Icons.settings),
       transitionsPage: TransitionsPage(
         builder: (ctx) => ConfigPage(),
+      ),
+    ),
+    DetailsPage(
+      name: 'Isolate', 
+      goToNamedRoute: isolatePage,
+      leading: Icon(Icons.iso_outlined),
+      transitionsPage: TransitionsPage(
+        builder: (ctx) => IsolatePage(),
       ),
     ),
   ];

@@ -22,7 +22,7 @@ class ConfigPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('Usar Tema "Dark":'),
+              Text('Usar Tema "Dark"'),
               Switch(
                 value: isDarkTheme,
                 onChanged: (value) {

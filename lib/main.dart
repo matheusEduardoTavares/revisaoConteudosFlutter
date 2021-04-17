@@ -43,8 +43,8 @@ Future<void> main() async {
           ),
           appBarTheme: AppBarTheme(
             backgroundColor: Colors.purple,
-            brightness: Provider.of<Configs>(ctx).appBrightness == Brightness.dark ?
-              Brightness.light : Brightness.dark,
+            brightness: Brightness.dark,
+            centerTitle: true,
           ),
           primaryColor: Colors.purple,
           accentColor: Colors.orangeAccent,
