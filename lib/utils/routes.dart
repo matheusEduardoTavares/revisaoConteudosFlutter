@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:projetocompleto2/models/details_page.dart';
 import 'package:projetocompleto2/models/transitions_page.dart';
 import 'package:projetocompleto2/pages/bottom_tab_page/bottom_tab_page.dart';
+import 'package:projetocompleto2/pages/config_page/config_page.dart';
 import 'package:projetocompleto2/pages/form_page/form_page.dart';
 import 'package:projetocompleto2/pages/home_page/home_page.dart';
 import 'package:projetocompleto2/pages/login_page/login_page.dart';
@@ -18,6 +19,7 @@ abstract class Routes {
   static const formPage = '/form';
   static const loginPage = '/login';
   static const reduxPage = '/redux';
+  static const configsPage = '/configs';
 
   static final detailsPage = <DetailsPage>[
     DetailsPage(
@@ -67,6 +69,14 @@ abstract class Routes {
       leading: Icon(Icons.redeem),
       transitionsPage: TransitionsPage(
         builder: (ctx) => ReduxPage(),
+      ),
+    ),
+    DetailsPage(
+      name: 'Configurações', 
+      goToNamedRoute: reduxPage,
+      leading: Icon(Icons.settings),
+      transitionsPage: TransitionsPage(
+        builder: (ctx) => ConfigPage(),
       ),
     ),
   ];

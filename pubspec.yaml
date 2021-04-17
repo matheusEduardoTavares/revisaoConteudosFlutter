@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   flutter_redux: ^0.8.2
+  provider: ^5.0.0
   redux: ^5.0.0
 
 dev_dependencies:
@@ -66,6 +67,5 @@ flutter:
   #         weight: 700
   assets:
     - assets/images/restaurant.jpg
-  #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
