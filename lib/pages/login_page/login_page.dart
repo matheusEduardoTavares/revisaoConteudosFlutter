@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
                     horizontal: 60,
                     vertical: 8,
                   ),
-                  child: Text('Minha Loja', style: TextStyle(fontSize: 40, color: Colors.white)),
+                  child: Text('Fazer Login', style: TextStyle(fontSize: 40, color: Colors.white)),
                   transform: Matrix4.rotationZ(-8 * pi / 180),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40),

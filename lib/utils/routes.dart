@@ -6,6 +6,7 @@ import 'package:projetocompleto2/pages/bottom_tab_page/bottom_tab_page.dart';
 import 'package:projetocompleto2/pages/form_page/form_page.dart';
 import 'package:projetocompleto2/pages/home_page/home_page.dart';
 import 'package:projetocompleto2/pages/login_page/login_page.dart';
+import 'package:projetocompleto2/pages/redux_page/redux_page.dart';
 import 'package:projetocompleto2/pages/top_tab_page/top_tab_page.dart';
 import 'package:projetocompleto2/widgets/custom_drawer/custom_drawer.dart';
 import 'package:projetocompleto2/widgets/custom_material_page_route/custom_material_page_route.dart';
@@ -16,6 +17,7 @@ abstract class Routes {
   static const bottomTabPage = '/bottom_tab';
   static const formPage = '/form';
   static const loginPage = '/login';
+  static const reduxPage = '/redux';
 
   static final detailsPage = <DetailsPage>[
     DetailsPage(
@@ -57,6 +59,14 @@ abstract class Routes {
       leading: Icon(Icons.login),
       transitionsPage: TransitionsPage(
         builder: (ctx) => LoginPage(),
+      ),
+    ),
+    DetailsPage(
+      name: 'Redux', 
+      goToNamedRoute: reduxPage,
+      leading: Icon(Icons.redeem),
+      transitionsPage: TransitionsPage(
+        builder: (ctx) => ReduxPage(),
       ),
     ),
   ];
