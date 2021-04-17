@@ -37,8 +37,8 @@ class _FormPageState extends State<FormPage> {
               child: ListView.builder(
                 itemCount: _items.length,
                 itemBuilder: (ctx, index) => ListTile(
-                  leading: Text('$index.'),
-                  title: Text('Item: ${_items[index]}'),
+                  leading: Text('${index + 1}.'),
+                  title: Text('Item: ${{_items[index]}.toString().replaceAll(".", ",").replaceAll("{", "").replaceAll("}", "")}'),
                 ),
               ),
             ),
@@ -59,7 +59,7 @@ class _FormPageState extends State<FormPage> {
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
-                        if (value.isEmpty || double.tryParse(value) == null) {
+                        if (value.isEmpty || double.tryParse(value.replaceAll(',', '.')) == null) {
                           return 'Digite um número';
                         }
 
@@ -73,8 +73,11 @@ class _FormPageState extends State<FormPage> {
                   child: Text('Adicionar'),
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
-                      _items.add(double.parse(_itemController.text));
+                      setState(() {
+                        _items.add(double.parse(_itemController.text.replaceAll(',', '.')));
+                      });
                       _itemFocus?.unfocus();
+                      _itemController.clear();
                     }
                     else {
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
