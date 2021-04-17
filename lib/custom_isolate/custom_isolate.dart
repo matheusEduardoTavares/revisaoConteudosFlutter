@@ -30,10 +30,10 @@ class CustomIsolate {
 
     otherPort.listen((data) {
       final IsolateSend isolateSend = data;
-      final Data myData = isolateSend.data;
+      final myData = isolateSend.data;
 
-      final int value = myData.value;
-      final bool isIncrement = myData.isIncrement;
+      final value = myData.value;
+      final isIncrement = myData.isIncrement;
       final portToFront = isolateSend.port;
 
       final newValue = isIncrement ? value + 1 : value - 1;

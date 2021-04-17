@@ -33,7 +33,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             child: DrawerHeader(
               child: Text(
-                'Aplicativo de estudos', 
+                'Aplicativo de estudo', 
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 40,
