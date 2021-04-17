@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:projetocompleto2/models/details_page.dart';
 import 'package:projetocompleto2/models/transitions_page.dart';
 import 'package:projetocompleto2/pages/bottom_tab_page/bottom_tab_page.dart';
+import 'package:projetocompleto2/pages/form_page/form_page.dart';
 import 'package:projetocompleto2/pages/home_page/home_page.dart';
 import 'package:projetocompleto2/pages/top_tab_page/top_tab_page.dart';
 import 'package:projetocompleto2/widgets/custom_material_page_route/custom_material_page_route.dart';
@@ -11,6 +12,7 @@ abstract class Routes {
   static const homePage = '/';
   static const topTabPage = '/top_tab';
   static const bottomTabPage = '/bottom_tab';
+  static const formPage = '/form';
 
   static final detailsPage = <DetailsPage>[
     DetailsPage(
@@ -36,6 +38,14 @@ abstract class Routes {
       transitionsPage: TransitionsPage(
         builder: (ctx) => BottomTabPage(),
         hasAnimation: false,
+      ),
+    ),
+    DetailsPage(
+      name: 'Form', 
+      goToNamedRoute: formPage,
+      leading: Icon(Icons.format_align_center_outlined),
+      transitionsPage: TransitionsPage(
+        builder: (ctx) => FormPage(),
       ),
     ),
   ];

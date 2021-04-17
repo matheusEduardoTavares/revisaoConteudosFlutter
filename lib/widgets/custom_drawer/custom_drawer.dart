@@ -40,25 +40,39 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
           ),
-          const Divider(),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.red,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.purple,
+                  blurRadius: 3.0,
+                ),
+              ],
+            ),
+            height: 2,
+          ),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.zero,
-              itemCount: pagesItems.length,
-              itemBuilder: (ctx, index) => Card(
-                elevation: 5.0,
-                shadowColor: Colors.grey,
-                child: ListTile(
-                  selected: _selectedIndex == index,
-                  leading: pagesItems[index].leading,
-                  title: pagesItems[index].title ?? Text(pagesItems[index].name),
-                  onTap: () {
-                    _selectedIndex = index;
-                    Navigator.of(context).pushReplacementNamed(
-                      pagesItems[index].goToNamedRoute,
-                      arguments: pagesItems[index].transitionsPage,
-                    );
-                  },
+            child: Container(
+              color: Colors.red[50],
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: pagesItems.length,
+                itemBuilder: (ctx, index) => Card(
+                  elevation: 5.0,
+                  shadowColor: Colors.grey,
+                  child: ListTile(
+                    selected: _selectedIndex == index,
+                    leading: pagesItems[index].leading,
+                    title: pagesItems[index].title ?? Text(pagesItems[index].name),
+                    onTap: () {
+                      _selectedIndex = index;
+                      Navigator.of(context).pushReplacementNamed(
+                        pagesItems[index].goToNamedRoute,
+                        arguments: pagesItems[index].transitionsPage,
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
