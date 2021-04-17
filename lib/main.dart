@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:projetocompleto2/utils/routes.dart';
+import 'package:projetocompleto2/widgets/custom_page_transitions_builder/custom_page_transitions_builder.dart';
 
 Future<void> main() async {
   print('1');
@@ -18,6 +19,13 @@ Future<void> main() async {
     MaterialApp(
       title: 'ProjectComplete',
       onGenerateRoute: Routes.onGenerateRoutes,
+      theme: ThemeData(
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CustomPageTransitionsBuilder()
+          }
+        ),
+      ),
     ),
   );
 }
