@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:async';
 
 import 'package:projetocompleto2/utils/routes.dart';
@@ -15,6 +16,10 @@ Future<void> main() async {
   await Future.delayed(const Duration(seconds: 1));
   print('5');
 
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //   statusBarIconBrightness: Brightness.light
+  // ));
+
   runApp(
     MaterialApp(
       title: 'ProjectComplete',
@@ -27,6 +32,18 @@ Future<void> main() async {
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.purple,
+          brightness: Brightness.dark
+        ),
+        primaryColor: Colors.purple,
+        accentColor: Colors.orangeAccent,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.purple),
+          ),
         ),
       ),
     ),
