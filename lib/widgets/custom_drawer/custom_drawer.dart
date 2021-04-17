@@ -11,24 +11,39 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          DrawerHeader(
-            child: Text(
-              'Aplicativo de estudos', 
-              style: TextStyle(
-                fontSize: 40,
-                color: Colors.red,
-                shadows: [
-                  Shadow(
-                    blurRadius: 0.8,
-                    color: Colors.black,
-                  ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.orangeAccent,
+                  Colors.purple,
                 ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: DrawerHeader(
+              child: Text(
+                'Aplicativo de estudos', 
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 40,
+                  color: Colors.redAccent,
+                  shadows: [
+                    Shadow(
+                      blurRadius: 3.0,
+                      offset: Offset(0, -3),
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 30),
+          const Divider(),
           Expanded(
             child: ListView.builder(
+              padding: EdgeInsets.zero,
               itemCount: pagesItems.length,
               itemBuilder: (ctx, index) => Card(
                 elevation: 5.0,
