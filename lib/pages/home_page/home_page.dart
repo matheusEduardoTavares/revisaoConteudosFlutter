@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projetocompleto2/widgets/custom_drawer/custom_drawer.dart';
 
 class HomePage extends StatefulWidget {
   @override 
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         title: Text('HomePage'),
         centerTitle: true,
       ),
+      drawer: CustomDrawer(),
       body: Center(
         child: Text(_currentAppState, style: TextStyle(fontSize: 40, color: Colors.red))
       ),
