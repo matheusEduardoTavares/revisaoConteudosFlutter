@@ -1,16 +1,4 @@
-# projetocompleto2
+# Projeto de Revisão
+## Descrição
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Projeto criado para servir de revisão de alguns conteúdos de Flutter já estudados por mim até o momento, tais quais o uso do `SQFlite` de forma a persistir os dados locais, podendo assim fazer o auto-login ao abrir o APP, dando a possibilidade de fazer o logout quando o usuário clicar no botão; fazer as operações do CRUD com relação a isso; a criação de um APP com tema dark / light fazendo uso da tematização do Flutter; dois grandes gerenciamentos de Estado que são o `Redux` e o `Provider`; todas as formas de navegação conhecidas por mim (`TabBar`, `BottomNavigationBar`, `Drawer`, Stack - via `Navigator`); uso de animações personalizadas tanto na transição de páginas quanto em alguns Widgets específicos (no caso foi usado o `FadeTransition`, o `SlideTransition`, o `AnimatedContainer` e `AnimatedBuilder`); trabalhado com a questão de responsividade; gerenciamento do estado da aplicação (`AppLifecycleState`); gerenciamento do ciclo de vida dos Widgets (`initState`, `dispose`, `didUpdateWidget` - no caso não precisou ser usado, entre outros); Uso de formulários e tratamento de erros com modais (`Dialogs`) / `SnackBar`; trabalhado um pouco também com `Isolates`, entre outros tópicos que foram abordados. Importante ressaltar que este projeto não teve foco em fazer uma boa arquitetura e nem em deixar um código bonito / limpo; tal projeto foi criado apenas para servir de revisão dos tópicos já aprendidos. Como o APP já foi desenvolvido justo com essa ideia, então nem sequer todos itens colocados no mesmo fazem sentido ou estão em uma ordem semântica. Acabei não abordando o trabalho com clientes `http`, mas já usei tanto o package `HTTP`, quanto o `DIO` e também um pouco do `GetConnect`.
