@@ -21,6 +21,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
   AnimationController _controller;
   Animation<Size> _heightAnimation;
+  Animation<double> _opacityAnimation;
+  Animation<Offset> _slideAnimation;
 
   @override 
   void initState() {
@@ -38,8 +40,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     );
 
     _heightAnimation = Tween<Size>(
-      begin: Size(double.infinity, 290.0),
-      end: Size(double.infinity, 371.0)
+      begin: Size(double.infinity, 291.0),
+      end: Size(double.infinity, 393.0)
     ).animate(
       CurvedAnimation(
         parent: _controller,
@@ -47,9 +49,32 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       ),
     );
 
-    _heightAnimation.addListener(() {
-      setState(() {});
-    });
+    ///Usando o [AnimatedContainer] e não o 
+    ///[AnimatedBuilder] não precisa do 
+    ///[addListener] para dar um [setState]
+    // _heightAnimation.addListener(() {
+    //   setState(() {});
+    // });
+
+    _opacityAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.ease,
+      ),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(0.0, -1.5),
+      end: Offset(0.0, 0.0)
+    ).animate(
+      CurvedAnimation(
+        curve: Curves.ease,
+        parent: _controller,
+      ),
+    );
   }
 
   @override
@@ -58,8 +83,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
     return Scaffold(
       body: Stack(
-        alignment: Alignment.center,
-        fit: StackFit.expand,
         children: [
           Container(
             decoration: BoxDecoration(
@@ -74,136 +97,146 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             ),
           ),
           Container(
-            height: _heightAnimation.value.height,
             width: double.infinity,
-            child: Form(
-              key: _formKey,
+            child: Center(
               child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 20),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 60,
-                        vertical: 8,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 60,
+                          vertical: 8,
+                        ),
+                        child: Text(_text, style: TextStyle(fontSize: 40, color: Colors.white)),
+                        transform: Matrix4.rotationZ(-8 * pi / 180),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: Colors.redAccent,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 4.0,
+                              spreadRadius: 5.0,
+                              color: Theme.of(context).accentColor,
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Text(_text, style: TextStyle(fontSize: 40, color: Colors.white)),
-                      transform: Matrix4.rotationZ(-8 * pi / 180),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: Colors.redAccent,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 4.0,
-                            spreadRadius: 5.0,
-                            color: Theme.of(context).accentColor,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Column(
-                      children: [
-                        Card(
-                          margin: const EdgeInsets.all(10),
-                          elevation: 8.0,
-                          child: AnimatedBuilder(
-                            animation: _heightAnimation,
-                            builder: (context, _) {
-                              return Container(
-                                height: _heightAnimation.value.height,
-                                width: MediaQuery.of(context).size.width * 0.75,
-                                padding: const EdgeInsets.all(15),
-                                child: Column(
-                                  children: [
-                                    TextFormField(
-                                      focusNode: _nameFocus,
-                                      controller: _nameController,
-                                      decoration: InputDecoration(
-                                        labelText: 'Nome'
-                                      ),
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Digite um nome';
-                                        }
-                                        else if (value.length < 4) {
-                                          return 'Digite pelo menos 4 caracteres';
-                                        }
-
-                                        return null;
-                                      },
-                                    ),
-                                    TextFormField(
-                                      focusNode: _passwordFocus,
-                                      controller: _passwordController,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                                      decoration: InputDecoration(
-                                        labelText: 'Senha'
-                                      ),
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Digite uma senha';
-                                        }
-                                        else if (value.length < 7) {
-                                          return 'Digite pelo menos 7 caracteres';
-                                        }
-
-                                        return null;
-                                      },
-                                    ),
-                                    if (!_isLogin)
+                      const SizedBox(height: 10),
+                      Column(
+                        children: [
+                          Card(
+                            margin: const EdgeInsets.all(10),
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                LayoutBuilder(
+                                  builder: (ctx, constraints) => AnimatedContainer(
+                                  height: _isLogin ? 291.0 : 371.0,
+                                  duration: _defaultDuration,
+                                  curve: Curves.ease,
+                                  width: MediaQuery.of(context).size.width * 0.75,
+                                  padding: const EdgeInsets.all(15),
+                                  child: Column(
+                                    children: [
                                       TextFormField(
-                                        focusNode: _confirmPasswordFocus,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        focusNode: _nameFocus,
+                                        controller: _nameController,
                                         decoration: InputDecoration(
-                                          labelText: 'Confirmar a senha'
+                                          labelText: 'Nome'
                                         ),
-                                        validator: !_isLogin ? (value) {
-                                          if (value != _passwordController.value.text) {
-                                            return 'Senhas diferentes';
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Digite um nome';
+                                          }
+                                          else if (value.length < 4) {
+                                            return 'Digite pelo menos 4 caracteres';
                                           }
 
                                           return null;
-                                        } : null,
+                                        },
                                       ),
-                                    const SizedBox(height: 10),
-                                    ElevatedButton(
-                                      child: Text(_text),
-                                      onPressed: () {
-                                        print('_isLogin = $_isLogin');
-                                        print('ElevatedButton');
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text(_isLogin ? 'Mudar para criação de conta' : 'Mudar para fazer login'),
-                                      onPressed: () {
-                                        print('_isLogin = $_isLogin');
-                                        print('TextButton');
-                                        setState(() {
-                                          _isLogin = !_isLogin;
-                                        });
+                                      TextFormField(
+                                        focusNode: _passwordFocus,
+                                        controller: _passwordController,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        decoration: InputDecoration(
+                                          labelText: 'Senha'
+                                        ),
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Digite uma senha';
+                                          }
+                                          else if (value.length < 7) {
+                                            return 'Digite pelo menos 7 caracteres';
+                                          }
 
-                                        if (_isLogin) {
-                                          _controller.reverse();
-                                        }
-                                        else {
-                                          _controller.forward();
-                                        }
+                                          return null;
+                                        },
+                                      ),
+                                      AnimatedContainer(
+                                        height: _isLogin ? 0 : 100.0,
+                                        duration: _defaultDuration,
+                                        curve: Curves.ease,
+                                        child: SlideTransition(
+                                          position: _slideAnimation,
+                                          child: FadeTransition(
+                                            opacity: _opacityAnimation,
+                                            child: TextFormField(
+                                              focusNode: _confirmPasswordFocus,
+                                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                                              decoration: InputDecoration(
+                                                labelText: 'Confirmar a senha'
+                                              ),
+                                              validator: !_isLogin ? (value) {
+                                                if (value != _passwordController.value.text) {
+                                                  return 'Senhas diferentes';
+                                                }
 
-                                        print('_isLogin = $_isLogin');
-                                      },
-                                    ),
-                                  ],
+                                                return null;
+                                              } : null,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      ElevatedButton(
+                                        child: Text(_text),
+                                        onPressed: () {
+                                          print('_isLogin = $_isLogin');
+                                          print('ElevatedButton');
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text(_isLogin ? 'Mudar para criação de conta' : 'Mudar para fazer login'),
+                                        onPressed: () {
+                                          setState(() {
+                                            _isLogin = !_isLogin;
+                                            if (_isLogin) {
+                                              _controller.reverse();
+                                            }
+                                            else {
+                                              _controller.forward();
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )
                                 ),
-                              );
-                            }
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
