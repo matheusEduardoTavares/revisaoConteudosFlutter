@@ -24,6 +24,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   Animation<double> _opacityAnimation;
   Animation<Offset> _slideAnimation;
 
+  final _minHeight = 254.0;
+  final _maxHeight = 354.0;
+
   @override 
   void initState() {
     super.initState();
@@ -40,8 +43,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     );
 
     _heightAnimation = Tween<Size>(
-      begin: Size(double.infinity, 291.0),
-      end: Size(double.infinity, 393.0)
+      begin: Size(double.infinity, _minHeight),
+      end: Size(double.infinity, _maxHeight)
     ).animate(
       CurvedAnimation(
         parent: _controller,
@@ -96,10 +99,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            child: Center(
-              child: SingleChildScrollView(
+          Center(
+            child: SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -136,7 +139,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                               children: [
                                 LayoutBuilder(
                                   builder: (ctx, constraints) => AnimatedContainer(
-                                  height: _isLogin ? 291.0 : 371.0,
+                                  height: _isLogin ? _minHeight : _maxHeight,
                                   duration: _defaultDuration,
                                   curve: Curves.ease,
                                   width: MediaQuery.of(context).size.width * 0.75,
