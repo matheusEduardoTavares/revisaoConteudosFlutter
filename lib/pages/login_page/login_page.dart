@@ -246,6 +246,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                   child: Column(
                                     children: [
                                       TextFormField(
+                                        key: const ValueKey('1'),
                                         focusNode: _nameFocus,
                                         controller: _nameController,
                                         decoration: InputDecoration(
@@ -264,6 +265,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                         },
                                       ),
                                       TextFormField(
+                                        key: const ValueKey('2'),
                                         focusNode: _passwordFocus,
                                         controller: _passwordController,
                                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -282,6 +284,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                         },
                                       ),
                                       AnimatedContainer(
+                                        key: const ValueKey('4'),
                                         height: _isLogin ? 0 : 100.0,
                                         duration: _defaultDuration,
                                         curve: Curves.ease,
@@ -290,6 +293,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                           child: FadeTransition(
                                             opacity: _opacityAnimation,
                                             child: TextFormField(
+                                              key: const ValueKey('3'),
                                               focusNode: _confirmPasswordFocus,
                                               autovalidateMode: AutovalidateMode.onUserInteraction,
                                               decoration: InputDecoration(
@@ -343,6 +347,15 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                                 _signupError();
                                               }
                                             }
+                                          }
+                                          else {
+                                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+                                            ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                content: Text('Preencha os campos corretamente !!'),
+                                                duration: const Duration(seconds: 1),
+                                              ));
                                           }
                                         },
                                       ),

@@ -36,7 +36,7 @@ abstract class DbUtil {
       where: 'id = ${data["id"]}'
     );
 
-    print(userUpdatedId);
+    return userUpdatedId;
   }
 
   static Future<List<User>> getData() async {

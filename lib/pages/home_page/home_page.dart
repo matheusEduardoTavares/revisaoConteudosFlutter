@@ -35,8 +35,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
             Provider.of<UserProvider>(context, listen: false).updateUser(userLogged);
             Provider.of<Configs>(context, listen: false).updateConfig(userLogged.isDarkTheme);
-            
-            print('HAVIA O USUÁRIO COM NOME ${userLogged.name}');
 
             Navigator.of(context).pushReplacementNamed(
               Routes.userHomePage,
@@ -46,9 +44,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               )
             );
           }
-        }
-        else {
-          print('NÃO HAVIA USUÁRIO CADASTRADO!!');
         }
 
         setState(() {
