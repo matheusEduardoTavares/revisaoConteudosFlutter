@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projetocompleto2/providers/configs/configs.dart';
+import 'package:projetocompleto2/providers/user_provider/user_provider.dart';
+import 'package:projetocompleto2/utils/db_util.dart';
 import 'package:projetocompleto2/utils/navigator_config.dart';
 import 'dart:async';
 
@@ -26,13 +28,24 @@ Future<void> main() async {
   //   statusBarIconBrightness: Brightness.light
   // ));
 
+  WidgetsFlutterBinding.ensureInitialized();
+  await DbUtil.initDb();
+
   final _primaryColor = Colors.purple;
   final _accentColor = Colors.orangeAccent;
 
   runApp(
-    ChangeNotifierProvider(
-      create: (ctx) => Configs(),
-      lazy: true,
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Configs>(
+          create: (ctx) => Configs(),
+          lazy: true,
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => UserProvider(),
+          lazy: true,
+        ),
+      ],
       builder: (ctx, _) {
         final brightness = Provider.of<Configs>(ctx).appBrightness;
         final _isDarkMode = brightness == Brightness.dark;

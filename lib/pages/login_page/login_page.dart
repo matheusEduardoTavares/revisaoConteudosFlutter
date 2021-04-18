@@ -1,7 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:projetocompleto2/models/transitions_page.dart';
+import 'package:projetocompleto2/models/user.dart';
+import 'package:projetocompleto2/pages/user_home_page/user_home_page.dart';
+import 'package:projetocompleto2/providers/configs/configs.dart';
+import 'package:projetocompleto2/providers/user_provider/user_provider.dart';
+import 'package:projetocompleto2/utils/db_util.dart';
+import 'package:projetocompleto2/utils/routes.dart';
 import 'package:projetocompleto2/widgets/positioned_button_to_home_page/positioned_button_to_home_page.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -20,12 +28,70 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   final _defaultDuration = const Duration(milliseconds: 300);
 
   AnimationController _controller;
-  Animation<Size> _heightAnimation;
+  // Animation<Size> _heightAnimation;
   Animation<double> _opacityAnimation;
   Animation<Offset> _slideAnimation;
 
-  final _minHeight = 254.0;
-  final _maxHeight = 354.0;
+  final _minHeight = 300.0;
+  final _maxHeight = 400.0;
+
+  Future<void> _notFoundUser() {
+    return showDialog(
+      context: context, 
+      builder: (ctx) => AlertDialog(
+        title: Text('Erro'),
+        content: Text('Usuário não encontrado'),
+        actions: [
+          TextButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _signupError() {
+    return showDialog(
+      context: context, 
+      builder: (ctx) => AlertDialog(
+        title: Text('Erro'),
+        content: Text('Não foi possível criar a conta'),
+        actions: [
+          TextButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _doLogin() async {
+    try {
+      final user = await DbUtil.getData();
+
+      if (user != null) {
+        Provider.of<UserProvider>(context, listen: false)
+          .updateUser(user);
+
+        Navigator.of(context)
+          .pushReplacementNamed(
+            Routes.userHomePage,
+            arguments: TransitionsPage(
+              isUserPage: true,
+              builder: (ctx) => UserHomePage()
+            )
+          );
+      }
+      else {
+        _notFoundUser();
+      }
+    }
+    catch (_) {
+      _notFoundUser();
+    }
+  }
 
   @override 
   void initState() {
@@ -42,15 +108,15 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       duration: _defaultDuration,
     );
 
-    _heightAnimation = Tween<Size>(
-      begin: Size(double.infinity, _minHeight),
-      end: Size(double.infinity, _maxHeight)
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.ease,
-      ),
-    );
+    // _heightAnimation = Tween<Size>(
+    //   begin: Size(double.infinity, _minHeight),
+    //   end: Size(double.infinity, _maxHeight)
+    // ).animate(
+    //   CurvedAnimation(
+    //     parent: _controller,
+    //     curve: Curves.ease,
+    //   ),
+    // );
 
     ///Usando o [AnimatedContainer] e não o 
     ///[AnimatedBuilder] não precisa do 
@@ -210,9 +276,29 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                       const SizedBox(height: 10),
                                       ElevatedButton(
                                         child: Text(_text),
-                                        onPressed: () {
-                                          print('_isLogin = $_isLogin');
-                                          print('ElevatedButton');
+                                        onPressed: () async {
+                                          if (_formKey.currentState.validate()) {
+                                            if (_isLogin) {
+                                              await _doLogin();
+                                            }
+                                            else {
+                                              try {
+                                                await DbUtil.saveData(
+                                                  User(
+                                                    name: _nameController.value.text, 
+                                                    password: _passwordController.value.text, 
+                                                    isDarkTheme: Provider.of<Configs>
+                                                      (context, listen: false).isDarkTheme
+                                                  ).toDbMap(),
+                                                );
+
+                                                await _doLogin();
+                                              }
+                                              catch (_) {
+                                                _signupError();
+                                              }
+                                            }
+                                          }
                                         },
                                       ),
                                       TextButton(

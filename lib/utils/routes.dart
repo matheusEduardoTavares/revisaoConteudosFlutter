@@ -10,20 +10,23 @@ import 'package:projetocompleto2/pages/isolate_page/isolate_page.dart';
 import 'package:projetocompleto2/pages/login_page/login_page.dart';
 import 'package:projetocompleto2/pages/redux_page/redux_page.dart';
 import 'package:projetocompleto2/pages/top_tab_page/top_tab_page.dart';
+import 'package:projetocompleto2/pages/user_home_page/user_home_page.dart';
 import 'package:projetocompleto2/widgets/custom_drawer/custom_drawer.dart';
 import 'package:projetocompleto2/widgets/custom_material_page_route/custom_material_page_route.dart';
 
 abstract class Routes {
   static const homePage = '/';
+  static const userHomePage = '/user';
   static const topTabPage = '/top_tab';
   static const bottomTabPage = '/bottom_tab';
   static const formPage = '/form';
   static const loginPage = '/login';
   static const reduxPage = '/redux';
   static const configsPage = '/configs';
+  static const configsUserPage = '/configs_user';
   static const isolatePage = '/isolate';
 
-  static final detailsPage = <DetailsPage>[
+  static final detailsGlobalPage = <DetailsPage>[
     DetailsPage(
       name: 'HomePage', 
       goToNamedRoute: homePage,
@@ -91,6 +94,27 @@ abstract class Routes {
     ),
   ];
 
+  static final detailsUserPage = <DetailsPage>[
+    DetailsPage(
+      name: 'userHomePage', 
+      goToNamedRoute: userHomePage,
+      leading: Icon(Icons.home),
+      transitionsPage: TransitionsPage(
+        builder: (ctx) => UserHomePage(),
+        isUserPage: true,
+      ),
+    ),
+    DetailsPage(
+      name: 'Configurações', 
+      goToNamedRoute: configsUserPage,
+      leading: Icon(Icons.settings),
+      transitionsPage: TransitionsPage(
+        builder: (ctx) => ConfigPage(isUserPage: true),
+        isUserPage: true,
+      ),
+    ),
+  ];
+
   static Route<dynamic> onGenerateRoutes(RouteSettings settings) {
     assert(
       settings.arguments == null || settings.arguments is TransitionsPage, 
@@ -100,7 +124,8 @@ abstract class Routes {
     );
 
     final TransitionsPage page = settings.arguments;
-    CustomDrawer.changePage(settings.name);
+    final isUserPage = page?.isUserPage ?? true;
+    CustomDrawer.changePage(settings.name, isUserPage ? detailsUserPage : detailsGlobalPage);
     return _defaultRoute(
       routeSettings: settings,
       fullscreenDialog: page?.fullscreenDialog ?? false,

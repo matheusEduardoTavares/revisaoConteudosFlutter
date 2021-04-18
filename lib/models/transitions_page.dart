@@ -7,6 +7,7 @@ class TransitionsPage<T> {
     this.maintainState,
     this.arguments,
     this.hasAnimation = true,
+    this.isUserPage = false,
   });
 
   final WidgetBuilder builder;
@@ -14,4 +15,5 @@ class TransitionsPage<T> {
   final bool maintainState;
   final T arguments;
   final bool hasAnimation;
+  final bool isUserPage;
 }

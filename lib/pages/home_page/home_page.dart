@@ -1,17 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:projetocompleto2/models/transitions_page.dart';
+import 'package:projetocompleto2/pages/user_home_page/user_home_page.dart';
+import 'package:projetocompleto2/providers/configs/configs.dart';
+import 'package:projetocompleto2/providers/user_provider/user_provider.dart';
+import 'package:projetocompleto2/utils/db_util.dart';
+import 'package:projetocompleto2/utils/routes.dart';
 import 'package:projetocompleto2/widgets/custom_drawer/custom_drawer.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
+  HomePage([this.hasVerifyUser = true]);
+
+  final bool hasVerifyUser;
+
   @override 
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   var _currentAppState = 'Sem informações';
+  var _isLoading = true;
 
   @override 
   void initState() {
     super.initState();
+
+    if (widget.hasVerifyUser ?? true) {
+      DbUtil.getData().then((user) {
+        if (user != null) {
+          Provider.of<UserProvider>(context, listen: false).updateUser(user);
+          Provider.of<Configs>(context, listen: false).updateConfig(user.isDarkTheme);
+          
+          print('HAVIA O USUÁRIO COM NOME ${user.name}');
+
+          Navigator.of(context).pushReplacementNamed(
+            Routes.userHomePage,
+            arguments: TransitionsPage(
+              isUserPage: true,
+              builder: (ctx) => UserHomePage()
+            )
+          );
+        }
+        else {
+          print('NÃO HAVIA USUÁRIO CADASTRADO!!');
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
 
     WidgetsBinding.instance.addObserver(this);
   }
@@ -29,7 +72,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override 
   Widget build(BuildContext context) {
-    return Scaffold(
+    return !_isLoading ? Scaffold(
       appBar: AppBar(
         title: Text('HomePage'),
         centerTitle: true,
@@ -38,6 +81,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       body: Center(
         child: Text(_currentAppState, style: TextStyle(fontSize: 40, color: Colors.red))
       ),
+    ) : Center(
+      child: CircularProgressIndicator(),
     );
   }
 
