@@ -86,6 +86,16 @@ abstract class DbUtil {
   }
 
   static Future<void> clearData() async {
-    await _db.delete(tableUser);
+    await _db.delete(
+      tableUser
+    );
+  }
+
+  static Future<void> deleteByUserId(int userId) async {
+    await _db.delete(
+      tableUser,
+      where: 'id = ?',
+      whereArgs: [userId]
+    );
   }
 }
