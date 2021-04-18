@@ -7,7 +7,6 @@ abstract class DbUtil {
 
   static final nameDb = 'data.db';
   static final tableUser = 'user';
-  static bool isLoggedUser = false;
 
   static Future<void> initDb() async {
     final path = await sql.getDatabasesPath();
@@ -15,30 +14,32 @@ abstract class DbUtil {
     _db = await sql.openDatabase(
       pathImport.join(path, nameDb),
       onCreate: (db, version) {
-        return db.execute('CREATE TABLE $tableUser (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(60), password VARCHAR(60), isDarkTheme INTEGER)');
+        return db.execute('CREATE TABLE $tableUser (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(60), password VARCHAR(60), isDarkTheme INTEGER, isLogged INTEGER)');
       },
       version: 1,
     );
   }
 
-  static Future<void> saveData(Map<String, dynamic> data) async {
-    await _db.insert(
+  static Future<int> saveData(Map<String, dynamic> data) async {
+    final newUserId = await _db.insert(
       tableUser,
       data,
     );
+
+    return newUserId;
   }
 
-  static Future<void> updateData(Map<String, dynamic> data) async {
-    var res = await _db.update(
+  static Future<int> updateData(Map<String, dynamic> data) async {
+    var userUpdatedId = await _db.update(
       tableUser,
       data,
       where: 'id = ${data["id"]}'
     );
 
-    print(res);
+    print(userUpdatedId);
   }
 
-  static Future<User> getData() async {
+  static Future<List<User>> getData() async {
     final users = await _db.query(
       tableUser,
     );
@@ -47,17 +48,41 @@ abstract class DbUtil {
       return null;
     }
 
-    var data = {
-      ...users.first,
-      'isDarkTheme': users.first["isDarkTheme"] == 1 ? true : false,
-    };
+    final formattedUsers = users.map((user) => User.fromDbMap(user)).toList();
 
-    print(data);
+    return formattedUsers;
+  }
 
-    final user = User.fromMap(data);
+  static Future<User> getUserById(int id) async {
+    final user = await _db.query(
+      tableUser,
+      where: 'id = ?',
+      whereArgs: [id]
+    );
 
-    isLoggedUser = true;
-    return user;
+    if (user == null || user.isEmpty) {
+      return null;
+    }
+
+    final currentUser = User.fromDbMap(user.first);
+
+    return currentUser;
+  }
+
+  static Future<User> getUserByNameAndPassword(String name, String password) async {
+    final user = await _db.query(
+      tableUser,
+      where: 'name = ? AND password = ?',
+      whereArgs: [name, password]
+    );
+
+    if (user == null || user.isEmpty) {
+      return null;
+    }
+
+    final currentUser = User.fromDbMap(user.first);
+
+    return currentUser;
   }
 
   static Future<void> clearData() async {

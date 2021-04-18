@@ -15,11 +15,10 @@ class Configs with ChangeNotifier {
 
     notifyListeners();
 
-    final user = await DbUtil.getData();
-    if (user != null && provider != null) {
-      final newUser = user.copyWith(isDarkTheme: isDarkTheme);
-      provider.updateUser(newUser);
+    if (provider.user != null) {
+      final newUser = provider.user.copyWith(isDarkTheme: isDarkTheme);
       await DbUtil.updateData(newUser.toDbMap());
+      provider.updateUser(newUser);
     }
   }
 

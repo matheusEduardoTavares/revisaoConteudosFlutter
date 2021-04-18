@@ -28,18 +28,24 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (widget.hasVerifyUser ?? true) {
       DbUtil.getData().then((user) {
         if (user != null) {
-          Provider.of<UserProvider>(context, listen: false).updateUser(user);
-          Provider.of<Configs>(context, listen: false).updateConfig(user.isDarkTheme);
-          
-          print('HAVIA O USUÁRIO COM NOME ${user.name}');
+          final indexUserLogged = user.indexWhere((user) => user.isLogged);
 
-          Navigator.of(context).pushReplacementNamed(
-            Routes.userHomePage,
-            arguments: TransitionsPage(
-              isUserPage: true,
-              builder: (ctx) => UserHomePage()
-            )
-          );
+          if (indexUserLogged != -1) {
+            final userLogged = user[indexUserLogged];
+
+            Provider.of<UserProvider>(context, listen: false).updateUser(userLogged);
+            Provider.of<Configs>(context, listen: false).updateConfig(userLogged.isDarkTheme);
+            
+            print('HAVIA O USUÁRIO COM NOME ${userLogged.name}');
+
+            Navigator.of(context).pushReplacementNamed(
+              Routes.userHomePage,
+              arguments: TransitionsPage(
+                isUserPage: true,
+                builder: (ctx) => UserHomePage()
+              )
+            );
+          }
         }
         else {
           print('NÃO HAVIA USUÁRIO CADASTRADO!!');

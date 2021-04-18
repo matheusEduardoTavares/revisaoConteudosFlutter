@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       context: context, 
       builder: (ctx) => AlertDialog(
         title: Text('Erro'),
-        content: Text('Usuário não encontrado'),
+        content: Text('Nome ou email errados'),
         actions: [
           TextButton(
             child: Text('OK'),
@@ -67,13 +67,46 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     );
   }
 
-  Future<void> _doLogin() async {
+  Future<void> _userAlreadyExists() {
+    return showDialog(
+      context: context, 
+      builder: (ctx) => AlertDialog(
+        title: Text('Erro'),
+        content: Text('O conjunto do nome e senha já foram usados'),
+        actions: [
+          TextButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _doLogin([int userId]) async {
     try {
-      final user = await DbUtil.getData();
+      User user;
+
+      if (userId == null) {
+        user = await DbUtil.getUserByNameAndPassword(
+          _nameController.value.text,
+          _passwordController.value.text, 
+        );
+      }
+      else {
+        user = await DbUtil.getUserById(userId);
+      }
 
       if (user != null) {
+        await DbUtil.updateData(
+          {
+            'id': user.id,
+            'isLogged': 1,
+          }
+        );
+
         Provider.of<UserProvider>(context, listen: false)
-          .updateUser(user);
+          .updateUser(user.copyWith(isLogged: true));
 
         Navigator.of(context)
           .pushReplacementNamed(
@@ -283,7 +316,19 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                             }
                                             else {
                                               try {
-                                                await DbUtil.saveData(
+                                                final alreadyNameAndPassword = 
+                                                  await DbUtil.getUserByNameAndPassword(
+                                                    _nameController.value.text,
+                                                    _passwordController.value.text, 
+                                                  );
+
+                                                if (alreadyNameAndPassword != null) {
+                                                  _userAlreadyExists();
+
+                                                  return;
+                                                }
+
+                                                final userId = await DbUtil.saveData(
                                                   User(
                                                     name: _nameController.value.text, 
                                                     password: _passwordController.value.text, 
@@ -292,7 +337,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                                   ).toDbMap(),
                                                 );
 
-                                                await _doLogin();
+                                                await _doLogin(userId);
                                               }
                                               catch (_) {
                                                 _signupError();

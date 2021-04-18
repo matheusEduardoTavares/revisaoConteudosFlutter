@@ -6,11 +6,13 @@ class User {
   String name;
   String password;
   bool isDarkTheme;
+  bool isLogged;
   User({
     this.id,
     @required this.name,
     @required this.password,
     @required this.isDarkTheme,
+    this.isLogged = false,
   });
 
   User copyWith({
@@ -18,12 +20,14 @@ class User {
     String name,
     String password,
     bool isDarkTheme,
+    bool isLogged,
   }) {
     return User(
       id: id ?? this.id,
       name: name ?? this.name,
       password: password ?? this.password,
       isDarkTheme: isDarkTheme ?? this.isDarkTheme,
+      isLogged: isLogged ?? this.isLogged,
     );
   }
 
@@ -33,6 +37,7 @@ class User {
       'name': name,
       'password': password,
       'isDarkTheme': isDarkTheme,
+      'isLogged': isLogged
     };
   }
 
@@ -42,6 +47,7 @@ class User {
       'name': name,
       'password': password,
       'isDarkTheme': isDarkTheme ? 1 : 0,
+      'isLogged': isLogged ? 1 : 0,
     };
   }
 
@@ -51,6 +57,17 @@ class User {
       name: map['name'],
       password: map['password'],
       isDarkTheme: map['isDarkTheme'],
+      isLogged: map['isLogged'],
+    );
+  }
+
+  factory User.fromDbMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id'],
+      name: map['name'],
+      password: map['password'],
+      isDarkTheme: map['isDarkTheme'] == 1 ? true : false,
+      isLogged: map['isLogged'] == 1 ? true : false,
     );
   }
 
@@ -59,5 +76,5 @@ class User {
   factory User.fromJson(String source) => User.fromMap(json.decode(source));
 
   @override
-  String toString() => 'User(id: $id, name: $name, password: $password, isDarkTheme: $isDarkTheme)';
+  String toString() => 'User(id: $id, name: $name, password: $password, isDarkTheme: $isDarkTheme, isLogged: $isLogged)';
 }

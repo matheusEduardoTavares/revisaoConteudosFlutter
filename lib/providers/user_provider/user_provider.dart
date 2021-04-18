@@ -10,5 +10,5 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  User get user => _user.copyWith();
+  User get user => _user?.copyWith();
 }

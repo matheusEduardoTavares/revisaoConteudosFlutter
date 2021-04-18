@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:projetocompleto2/models/details_page.dart';
 import 'package:projetocompleto2/models/transitions_page.dart';
 import 'package:projetocompleto2/pages/home_page/home_page.dart';
+import 'package:projetocompleto2/providers/user_provider/user_provider.dart';
 import 'package:projetocompleto2/utils/db_util.dart';
 import 'package:projetocompleto2/utils/routes.dart';
 import 'package:projetocompleto2/widgets/opacity_request/opacity_request.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatefulWidget {
   CustomDrawer({
@@ -124,7 +126,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           _isLoadingLogout = true;
                         });
 
-                        await DbUtil.clearData();
+                        await DbUtil.updateData(
+                          {
+                            'id': Provider.of<UserProvider>
+                              (context, listen: false).user.id,
+                            'isLogged': 0,
+                          }
+                        );
                         
                         setState(() {
                           _isLoadingLogout = false;
